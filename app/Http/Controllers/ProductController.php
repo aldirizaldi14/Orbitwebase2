@@ -18,6 +18,7 @@ use Storage;
 use DB;
 use Response;
 
+
 class ProductController extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
@@ -111,9 +112,9 @@ class ProductController extends BaseController
         $data->product_code = $request->input('product_code');
         $data->product_code_alt = $request->input('product_code_alt');
         $data->product_description = $request->input('product_description');
-		$data->product_location_alt = $request->input('product_location_alt');
+        $data->product_location_alt = $request->input('product_location_alt');
+        $data->product_side_alt='222';
         $process = $data->save();
-
         return $process;
     }
 
@@ -142,8 +143,8 @@ class ProductController extends BaseController
 
     public function export(Request $request)
     {
-        $data = $this->data($request);
 
+        $data = $this->data($request);
         $tanggal = date('Y-m');
         $tanggal = explode('-', $tanggal);
         $path = '/files/'.$tanggal[0].'/'.$tanggal[1].'/';
@@ -180,6 +181,13 @@ class ProductController extends BaseController
         $sheet->setCellValue('B5', 'Code');
         $sheet->setCellValue('C5', 'Alternative Code');
         $sheet->setCellValue('D5', 'Description');
+        $sheet->setCellValue('E5', 'Max Onhand');
+        $sheet->setCellValue('F5', 'Subinventory Code');
+        $sheet->setCellValue('G5', 'Max Onhand');
+        $sheet->setCellValue('H5', 'Max Onhand');
+        $sheet->setCellValue('I5', 'Max Onhand');
+        $sheet->setCellValue('J5', 'Max Onhand');
+        $sheet->setCellValue('K5', 'Max Onhand');
 
         $data = $data['listData'];
         $i = 5;
@@ -190,12 +198,18 @@ class ProductController extends BaseController
             $sheet->setCellValue('B'.$i, $sub->product_code);
             $sheet->setCellValue('C'.$i, $sub->product_code_alt);
             $sheet->setCellValue('D'.$i, $sub->product_description);
+            $sheet->setCellValue('E'.$i, $sub->product_max_alt);
+            $sheet->setCellValue('F'.$i, $sub->SUBINVENTORY_CODE);
+            $sheet->setCellValue('G'.$i, $sub->product_location_alt);
+            $sheet->setCellValue('H'.$i, $sub->QTY);
+            $sheet->setCellValue('I'.$i, $sub->product_side_alt);
+            $sheet->setCellValue('J'.$i, $sub->product_sid_alt);
+            $sheet->setCellValue('K'.$i, $sub->product_idt);
         }
 
-        $writer = new Xlsx($spreadsheet);
-        $filename = 'product.xlsx';
-        $writer->save(storage_path('app/public').$path.$filename);
-
-        return Response::download(storage_path('app/public').$path.$filename);
+         $writer = new Xlsx($spreadsheet);
+         $writer->save('product.xlsx');
+         $response = ['status' => 'error', 'success' => false, 'message' => 'Download Data Product'];
+        return  $response;
     }
 }

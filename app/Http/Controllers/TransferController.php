@@ -12,7 +12,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 use App\Model\TransferModel;
 use App\Model\TransferdetModel;
-use Session;
+use App\Model\Transfer_viewModel;
 use Storage;
 use DB;
 use Response;
@@ -29,7 +29,6 @@ class TransferController extends BaseController
     {
         return view('pages.transfer');
     }
-
     public function data(Request $request)
     {
         $draw = $request->get('draw');
@@ -38,20 +37,21 @@ class TransferController extends BaseController
         $filter = $request->get('filter');
         $sort = $request->get('sort');
         $dir = $request->get('dir');
-        if(! $sort){ $sort = 'transfer_code'; $dir = 'asc'; }
+        if(! $sort){ $sort = 'transfer_time'; $dir = 'desc'; }
 
         $filter = DB::raw("(
             LOWER(transfer_code) LIKE '%".strtolower($filter)."%'
-        )");
+            OR LOWER(product_code) LIKE '%".strtolower($filter)."%'
+            OR  CONVERT(VARCHAR, transfer_time , 120) LIKE '%".$filter."%')");
 
-        $data = TransferModel::orderBy($sort, $dir)
+        $data = Transfer_viewModel::orderBy($sort, $dir)
             ->whereRaw($filter);
-        if ($length) {  
-            $data->skip($start)->take($length); 
+        if ($length) {
+            $data->skip($start)->take($length);
         }
         $data = $data->get();
-        
-        $count = TransferModel::whereRaw($filter)
+
+        $count = Transfer_viewModel::whereRaw($filter)
             ->count();
 
         $result = [
@@ -201,7 +201,7 @@ class TransferController extends BaseController
         $sheet->setCellValue('A5', '#');
         $sheet->setCellValue('B5', 'Name');
         $sheet->setCellValue('C5', 'Description');
-        
+
         $data = $data['listData'];
         $i = 5;
         foreach ($data as $sub) {
@@ -215,7 +215,6 @@ class TransferController extends BaseController
         $writer = new Xlsx($spreadsheet);
         $filename = 'transfer.xlsx';
         $writer->save(storage_path('app/public').$path.$filename);
-
         return Response::download(storage_path('app/public').$path.$filename);
     }
 }

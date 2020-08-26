@@ -1,8 +1,8 @@
 @section('pageTitle', 'Receipt')
-
 @extends("layouts/app")
-
 @section('content')
+
+
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
     <div class="m-content">
         <div class="row">
@@ -14,43 +14,48 @@
                                 <h3 class="m-portlet__head-text">@yield('pageTitle')</h3>
                             </div>
                         </div>
+                        
                         <div class="m-portlet__head-tools">
                             <div class="row">
                                 <div class="col-md-6 col-md-1"></div>
                                 <div class="col-md-6 col-sm-11">
-                                    <input type="text" class="form-control pull-left" id="txtSearch" placeholder="Search" style="width: 200px; height: 40px; margin-right: 10px;">
-                                    <button type="button" class="btn btn-accent pull-left m-btn m-btn--custom m-btn--pill m-btn--icon m-btn--air" id="btnDownload" hidden="">
+                                    <input type="text" class="form-control pull-left" id="txtSearch" placeholder="Search" style="width: 200px; height: 40px; margin-right: 10px; margin-left: 250px;">
+
+                                        <button type="button"  class="btn btn-accent pull-left m-btn m-btn--custom m-btn--pill m-btn--icon m-btn--air" id="btnDownload" >
                                         <i class="m-nav__link-icon fa fa-download"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-accent pull-left m-btn m-btn--custom m-btn--pill m-btn--icon m-btn--air" id="btnAdd" hidden="">
-                                        <i class="m-nav__link-icon fa fa-plus"></i>
-                                    </button>
+                                        </button>
+
                                 </div>
                             </div>
                         </div>
                     </div>
+
+                    
                     <div class="m-portlet__body">
                         <div class="table-responsive">
                             <table id="tableData" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Time</th>
+                                        <th>Item Code</th>
                                         <th>Code</th>
-                                        <th>Receiver</th>
+                                        <th>Qty</th>
+                                        <th>Receipt Date</th>
+                                        <th>User</th>
                                         <th>&nbsp;</th>
                                     </tr>
                                 </thead>
                             </table>
-                            <tbody></tbody>
+                            <tbody>
+                            </tbody>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 <div id="modalForm" class="modal" role="dialog" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
@@ -97,6 +102,7 @@
                 </table>
                 <tbody></tbody>
             </div>
+
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -128,15 +134,149 @@ $(document).ready(function() {
     });
 
     var tableColumn = [
-        { data: "receipt_id", width : 50, sortable: false},
-        { data: "receipt_time" },
+        { data: "receiptdet_receipt_id", width : 50, sortable: false},
+        { data: "product_code" },
         { data: "receipt_code" },
-        { data: "user_fullname" },
-        { data: "receipt_id", width: 100, sortable: false}
+        { data: "receiptdet_qty" },
+        { data: "receipt_created_at" },
+        { data: "receipt_created_by" },
+        { data: "receiptdet_receipt_id", width: 100, sortable: false}
     ];
     var orderSort = '';
     var orderDir = '';
+    var buttonComon = {
+        exportOptions: {
+            format: {
+                body: function ( data, row, column, node )
+                {
+                    return column === 5 ?
+                    data.replace( /[$,]/g, '' ) :
+                    data;
+                }
+            }
+        }
+    };
+
+    //fungsi dibawah ini untuk melakukan export all data karena menggunakan serverside dan length data
+    function newexportaction(e, dt, button, config) {
+    var self = this;
+    var oldStart = dt.settings()[0]._iDisplayStart;
+    dt.one('preXhr', function (e, s, data) {
+        // Just this once, load all data from the server...
+        data.start = 0;
+        data.length = 2147483647;
+        dt.one('preDraw', function (e, settings) {
+            // Call the original action function
+            if (button[0].className.indexOf('buttons-copy') >= 0) {
+                $.fn.dataTable.ext.buttons.copyHtml5.action.call(self, e, dt, button, config);
+            } else if (button[0].className.indexOf('buttons-excel') >= 0) {
+                $.fn.dataTable.ext.buttons.excelHtml5.available(dt, config) ?
+                    $.fn.dataTable.ext.buttons.excelHtml5.action.call(self, e, dt, button, config) :
+                    $.fn.dataTable.ext.buttons.excelFlash.action.call(self, e, dt, button, config);
+            } else if (button[0].className.indexOf('buttons-csv') >= 0) {
+                $.fn.dataTable.ext.buttons.csvHtml5.available(dt, config) ?
+                    $.fn.dataTable.ext.buttons.csvHtml5.action.call(self, e, dt, button, config) :
+                    $.fn.dataTable.ext.buttons.csvFlash.action.call(self, e, dt, button, config);
+            } else if (button[0].className.indexOf('buttons-pdf') >= 0) {
+                $.fn.dataTable.ext.buttons.pdfHtml5.available(dt, config) ?
+                    $.fn.dataTable.ext.buttons.pdfHtml5.action.call(self, e, dt, button, config) :
+                    $.fn.dataTable.ext.buttons.pdfFlash.action.call(self, e, dt, button, config);
+            } else if (button[0].className.indexOf('buttons-print') >= 0) {
+                $.fn.dataTable.ext.buttons.print.action(e, dt, button, config);
+            }
+            dt.one('preXhr', function (e, s, data) {
+                // DataTables thinks the first item displayed is index 0, but we're not drawing that.
+                // Set the property to what it was before exporting.
+                settings._iDisplayStart = oldStart;
+                data.start = oldStart;
+            });
+            // Reload the grid with the original page. Otherwise, API functions like table.cell(this) don't work properly.
+            setTimeout(dt.ajax.reload, 0);
+            // Prevent rendering of the full data to the DOM
+            return false;
+        });
+    });
+        // Requery the server with the new one-time export settings
+        dt.ajax.reload();
+    };
+    //For Export Buttons available inside jquery-datatable "server side processing" - End
+
+
+
     var table = $("#tableData").DataTable({
+       dom: 'Bfrtip',
+        "buttons" : 
+        [
+
+            {
+                               "extend": 'copy',
+                               "text": '<i class="fa fa-file-text-o" style="color: green;"></i>',
+                               "titleAttr": 'Copy',                               
+                               "action": newexportaction,
+                               exportOptions: 
+                               {
+                                columns: [0, 1, 2, 3, 4, 5]
+                               }
+                           },
+                           {
+                               "extend": 'excel',
+                               "text": '<i class="fa fa-file-excel-o" style="color: green;"></i>',
+                               "titleAttr": 'Excel',                               
+                               "action": newexportaction,
+                               exportOptions: 
+                               {
+                                columns: [0, 1, 2, 3, 4, 5]
+                               },
+                               filename: function(){
+                                    var d = new Date();
+                                    var n = d.getTime();
+                                    return 'Orbit Receipt' + " " + d;
+                                }
+                           },
+                           {
+                               "extend": 'csv',
+                               "text": '<i class="fa fa-file-text-o" style="color: green;"></i>',
+                               "titleAttr": 'CSV',                               
+                               "action": newexportaction,
+                               exportOptions: 
+                               {
+                                columns: [0, 1, 2, 3, 4, 5]
+                               },
+                               filename: function(){
+                                    var d = new Date();
+                                    var n = d.getTime();
+                                    return 'Orbit Receipt' + " " + d;
+                                }
+                           },
+                           {
+                               "extend": 'pdf',
+                               "text": '<i class="fa fa-file-pdf-o" style="color: green;"></i>',
+                               "titleAttr": 'PDF',                               
+                               "action": newexportaction,
+                               exportOptions: 
+                               {
+                                columns: [0, 1, 2, 3, 4, 5]
+                               }
+                           },
+                           {
+                                "extend": 'print',
+                                "text": '<i class="fa fa-print" style="color: green;"></i>',
+                                "titleAttr": 'Print',                                
+                                "action": newexportaction,
+                                exportOptions: {
+                                    columns: [ 0, 1, 2, 3, 4, 5 ]
+                                },
+                               filename: function(){
+                                    var d = new Date();
+                                    var n = d.getTime();
+                                    return 'Orbit Receipt' + " " + d;
+                                }
+
+                           }
+
+        ],  
+        
+        deferRender: true,
         filter : false,
         sortable: true,
         info: true,
@@ -144,12 +284,13 @@ $(document).ready(function() {
         processing: true,
         serverSide: true,
         ordering : true,
-        order: [[ 1, "desc" ]],
+        order: [[ 4, "desc" ]],
         ajax: function(data, callback, settings) {
             orderSort = tableColumn[data.order[0].column].data;
             orderDir = data.order[0].dir;
             $.getJSON('{{ url('receipt/data') }}', {
                 draw: data.draw,
+                pageLength: 10,
                 length: data.length,
                 start: data.start,
                 filter: $("#txtSearch").val(),
@@ -178,7 +319,7 @@ $(document).ready(function() {
                     content += '<button type="button" class="btn btn-delete btn-accent m-btn--pill btn-sm m-btn m-btn--custom" data-index="'+ index.row +'"><i class="m-nav__link-icon fa fa-trash"></i></button>';
                     return content;
                 },
-                targets : [4]
+                targets : [6]
             },
         ],
         drawCallback: function(e,response){
@@ -186,7 +327,7 @@ $(document).ready(function() {
                 var index = $(this).data('index');
                 var data = table.row(index).data();
 
-                receipt_id = data.receipt_id;
+                receipt_id = data.receiptdet_receipt_id;
                 $("input[name=receipt_code]").val(data.receipt_code);
                 $("input[name=receipt_time]").val(data.receipt_time);
                 $("input[name=receipt_user_id]").val(data.user_fullname);
@@ -232,6 +373,9 @@ $(document).ready(function() {
             });
         }
     });
+    $("#btnDownload").on("click", function() {
+    table.button( '.buttons-excel' ).trigger();
+    }); //fungsi ini untuk memanggil id button samping kolom search supaya bisa untuk download excel
 
     var tableColumnDetail = [
         { data: "receiptdet_id", width : 50, sortable: false},
@@ -240,6 +384,7 @@ $(document).ready(function() {
         { data: "receiptdet_qty" },
     ];
     var tableDetail = $("#tableDetail").DataTable({
+        
         filter : false,
         sortable: false,
         info: true,
@@ -345,29 +490,18 @@ $(document).ready(function() {
         captureLength: 2
     });
 
-    $("#btnDownload").click(function(){
-        var filter = $("#txtSearch").val();
-        $.ajax({
-            url: '{{ url('receipt') }}/export',
-            method: "POST",
-            dataType : 'json',
-            data : {
-                filter : filter,
-                sort : orderSort,
-                dir : orderDir
-            }
-        })
-        .done(function(resp) {
-            if (resp.success) {
-                window.open(resp.file);
-            }else{
-                swal.fire("Warning", resp.message, "warning");
-            }
-        })
-        .fail(function() {
-            swal.fire("Warning", 'Unable to process request at this moment', "warning");
-        });
-    });
+    
+
+    
 });
 </script>
+    <script type="text/javascript" src="js/datetime.js"></script>
+    <script type="text/javascript" src="js/jszip.min.js"></script>
+    <script type="text/javascript" src="js/buttons.html5.min.js"></script>
+    <script type="text/javascript" src="js/buttons.print.min.js"></script>
+    <script type="text/javascript" src="js/dataTables.select.min.js"></script>
+
+
+
+
 @endsection

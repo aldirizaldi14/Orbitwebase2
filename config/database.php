@@ -90,6 +90,20 @@ return [
             'prefix_indexes' => true,
         ],
 
+		'oracle' => [
+            'driver'        => 'oracle',
+            'tns'           => env('DATABASE_URL', ''),
+            'host'          => env('ORC_HOST', ''),
+            'port'          => env('ORC', '1521'),
+            'database'      => env('ORC_DATABASE', 'forge'),
+            'service_name'  => env('ORC_SERVICE_NAME', ''),
+            'username'      => env('ORC_USERNAME', 'forge'),
+            'password'      => env('ORC_PASSWORD', ''),
+            'charset'       => env('ORC_CHARSET', 'AL32UTF8'),
+            'prefix'        => env('ORC_PREFIX', ''),
+            'prefix_schema' => env('ORC_SCHEMA_PREFIX', ''),
+        ],
+
     ],
 
     /*

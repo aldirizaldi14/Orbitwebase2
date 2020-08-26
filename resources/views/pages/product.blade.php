@@ -1,7 +1,5 @@
 @section('pageTitle', 'Product')
-
 @extends("layouts/app")
-
 @section('content')
 <div class="m-grid__item m-grid__item--fluid m-wrapper">
     <div class="m-content">
@@ -18,12 +16,12 @@
                             <div class="row">
                                 <div class="col-md-6 col-md-1"></div>
                                 <div class="col-md-6 col-sm-11">
-                                    <input type="text" class="form-control pull-left" id="txtSearch" placeholder="Search" style="width: 200px; height: 40px; margin-right: 10px;">
-                                    <button type="button" class="btn btn-accent pull-left m-btn m-btn--custom m-btn--pill m-btn--icon m-btn--air" id="btnDownload" hidden="">
-                                        <i class="m-nav__link-icon fa fa-download"></i>
-                                    </button>
+                                    <input type="text" class="form-control pull-left" id="txtSearch" placeholder="Search" style="width: 200px; height: 40px; margin-right: 10px; margin-left: 180px;">
                                     <button type="button" class="btn btn-accent pull-left m-btn m-btn--custom m-btn--pill m-btn--icon m-btn--air" id="btnAdd">
                                         <i class="m-nav__link-icon fa fa-plus"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-accent pull-left m-btn m-btn--custom m-btn--pill m-btn--icon m-btn--air" id="btnDownload" >
+                                        <i class="m-nav__link-icon fa fa-download"></i>
                                     </button>
                                 </div>
                             </div>
@@ -39,6 +37,7 @@
                                         <th>Alternative Code</th>
                                         <th>Description</th>
                                         <th>Onhand</th>
+                                        <th>Lot Max</th>
 										<th>Location</th>
 										<th>&nbsp;</th>
                                     </tr>
@@ -52,7 +51,6 @@
         </div>
     </div>
 </div>
-
 <div id="modalForm" class="modal" role="dialog" aria-hidden="true">
 <div class="modal-dialog" role="document">
 <div class="modal-content">
@@ -94,6 +92,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="form-group" style="color: red;">
                 <br/>You need to fill all field with * mark
             </div>
@@ -107,9 +106,7 @@
 </div>
 </div>
 <!-- End modal form -->
-
 @endsection
-
 @section('footer')
 <script type="text/javascript">
 $(document).ready(function() {
@@ -135,6 +132,7 @@ $(document).ready(function() {
         { data: "product_code_alt" },
         { data: "product_description" },
         { data: "QTY" },
+        { data: "product_max_alt" },
 		{ data: "product_location_alt" },
         { data: "product_id", width: 100, sortable: false}
     ];
@@ -182,7 +180,7 @@ $(document).ready(function() {
                     content += '<button type="button" class="btn btn-delete btn-accent m-btn--pill btn-sm m-btn m-btn--custom" data-index="'+ index.row +'"><i class="m-nav__link-icon fa fa-trash"></i></button>';
                     return content;
                 },
-                targets : [6]
+                targets : [7]
             },
         ],
         drawCallback: function(e,response){
@@ -271,7 +269,6 @@ $(document).ready(function() {
             btn.attr('disabled', false);
         });
     });
-
     $("#txtSearch").typeWatch({
         callback: function (value) { table.ajax.reload(); },
         wait: 750,
@@ -280,29 +277,7 @@ $(document).ready(function() {
         captureLength: 2
     });
 
-    $("#btnDownload").click(function(){
-        var filter = $("#txtSearch").val();
-        $.ajax({
-            url: '{{ url('product') }}/export',
-            method: "POST",
-            dataType : 'json',
-            data : {
-                filter : filter,
-                sort : orderSort,
-                dir : orderDir
-            }
-        })
-        .done(function(resp) {
-            if (resp.success) {
-                window.open(resp.file);
-            }else{
-                swal.fire("Warning", resp.message, "warning");
-            }
-        })
-        .fail(function() {
-            swal.fire("Warning", 'Unable to process request at this moment', "warning");
-        });
-    });
+    
 });
 </script>
 @endsection

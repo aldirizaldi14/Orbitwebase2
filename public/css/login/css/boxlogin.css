@@ -1,0 +1,129 @@
+
+.login100-pic {
+    width: 545px;
+}
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 105px;
+    margin-bottom: 20px;
+    width: 48%;
+    padding: 0px 0px 0px 0px;
+}
+
+/*.login100-form {
+    width: 30%;
+    margin: 85px 125px 0px 0px;
+    padding: 0px 0px 0px 0px;
+    background: transparent;
+}*/
+.login100-form {
+    width: 30%;
+    position: relative;
+    margin: -330px 0px 0px 490px;
+    padding: 0px 0px 0px 0px;
+    /* left: 35%; */
+    background: transparent;
+}
+
+
+.login100-form-btn:hover {
+    /*background: #8017A9;*/
+    background: #B906FF;
+}
+
+
+.login100-form-btn {
+    font-family: Montserrat-Bold;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #fff;
+    text-transform: uppercase;
+    width: 100%;
+    height: 50px;
+    border-radius: 25px;
+    /*background: #B906FF;*/
+    
+    background: #bf53ea;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 25px;
+    -webkit-transition: all 0.4s;
+    -o-transition: all 0.4s;
+    -moz-transition: all 0.4s;
+    transition: all 0.4s;
+}
+
+.focus-input100 {
+    display: block;
+    position: absolute;
+    border-radius: 25px;
+    bottom: 0px;
+    left: 0px;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    box-shadow: 0px 0px 0px 0px;
+    color: #B906FF;
+}
+
+.input100:focus + .focus-input100 + .symbol-input100 {
+    color: #bf53ea;
+    padding-left: 28px;
+}
+
+.logpanright {
+  margin: -55px 0px 0px 50px;
+  float:right;
+  /*height: auto;
+  position: absolute;
+  top: 170px;
+  right: 450px;*/
+    
+}
+
+.logpanleft {
+  padding: 5px 0px 0px 15px;
+  float:left;
+  /*height: auto;
+  position: absolute;
+  top: 160px;
+  left: 450px;*/
+  /*padding: 0px 0px 0px 0px;*/
+}
+
+.wrap-login100 .wrap-input100 .validate-input input {
+  background: transparent;
+}
+.wrap-login100 {
+    opacity: 0.5;
+    width: 75%;
+    padding: 0px 0px 0px 0px;
+    background: transparent;
+}
+
+.header-logpan {
+    /*display: table-cell;
+    vertical-align: middle;
+    text-align: left;*/
+    padding: 10px 10px 10px 10px;
+}
+
+.textpan{
+    
+    margin: 0px 0px 0px 745px;
+    font-family: "Arial Black", Gadget, sans-serif;
+    font-size: 25px;
+}
+.logospan{
+    padding: 0px 0px 0px 15px;
+}
+.textpan1{
+    width: 150px;
+}

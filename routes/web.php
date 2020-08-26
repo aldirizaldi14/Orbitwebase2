@@ -13,9 +13,21 @@
 Auth::routes(['register' => false]);
 Route::get('/', 'HomeController@index');
 Route::get('/logout', 'Auth\LoginController@logout');
+Route::get('/export', 'ReceiptController@export')->name('export');
+Route::get('/bomlist/import_bom', 'BomlistController@import_bom');
+
 
 Route::group(['middleware' => ['auth', 'auth:web']], function () {
-	Route::get('/home', 'HomeController@index')->name('home');
+    Route::get('/home', 'HomeController@index')->name('home');
+
+
+    Route::get('/mrp', 'MRPController@index');
+    Route::get('/shortage', 'MRPController@shortage');
+    Route::post('/shortage', 'MRPController@shortage');
+    Route::get('/save_mrp_cal', 'MRPController@save_mrp_cal');
+    Route::post('/change_date', 'MRPController@change_date');
+    Route::get('/mrp/mrp_data', 'MRPController@mrp_data');
+    Route::post('/mrp/mrp_onhand', 'MRPController@mrp_onhand');
 
 	Route::get('/user', 'UserController@index');
 	Route::get('/user/data', 'UserController@data');
@@ -50,7 +62,15 @@ Route::group(['middleware' => ['auth', 'auth:web']], function () {
 	Route::post('/product', 'ProductController@create');
 	Route::post('/product/export', 'ProductController@export');
 	Route::post('/product/{id}', 'ProductController@update');
-	Route::post('/product/delete/{id}', 'ProductController@delete');
+    Route::post('/product/delete/{id}', 'ProductController@delete');
+
+    Route::get('/material', 'MaterialController@index');
+	Route::get('/material/data', 'MaterialController@data');
+	Route::get('/material/detail', 'MaterialController@detail');
+	Route::post('/material', 'MaterialController@create');
+	Route::post('/material/export', 'MaterialController@export');
+	Route::post('/material/{id}', 'MaterialController@update');
+	Route::post('/material/delete/{id}', 'MaterialController@delete');
 
 	Route::get('/production', 'ProductionController@index');
 	Route::get('/production/data', 'ProductionController@data');
@@ -68,12 +88,15 @@ Route::group(['middleware' => ['auth', 'auth:web']], function () {
 	Route::post('/transfer/delete/{id}', 'TransferController@delete');
 
 	Route::get('/receipt', 'ReceiptController@index');
-	Route::get('/receipt/data', 'ReceiptController@data');
+    Route::get('/receipt/data', 'ReceiptController@data');
+    Route::get('/receipt/tes', 'ReceiptController@tes');
 	Route::get('/receipt/detail', 'ReceiptController@detail');
 	Route::post('/receipt', 'ReceiptController@create');
-	Route::post('/receipt/export', 'ReceiptController@export');
+    Route::get('/receipt/export', 'ReceiptController@export')->name('export');
+    Route::post('/receipt/export', 'ReceiptController@export');
 	Route::post('/receipt/{id}', 'ReceiptController@update');
-	Route::post('/receipt/delete/{id}', 'ReceiptController@delete');
+    Route::post('/receipt/delete/{id}', 'ReceiptController@delete');
+
 
 	Route::get('/allocation', 'AllocationController@index');
 	Route::get('/allocation/data', 'AllocationController@data');
@@ -91,10 +114,60 @@ Route::group(['middleware' => ['auth', 'auth:web']], function () {
 	Route::post('/delivery/{id}', 'DeliveryController@update');
 	Route::post('/delivery/delete/{id}', 'DeliveryController@delete');
 
+	Route::get('/preparation', 'PreparationController@index');
+	Route::get('/preparation/data', 'PreparationController@data');
+	Route::get('/preparation/detail', 'PreparationController@detail');
+	Route::post('/preparation', 'PreparationController@create');
+	Route::post('/preparation/export', 'PreparationController@export');
+	Route::post('/preparation/{id}', 'PreparationController@update');
+	Route::post('/preparation/delete/{id}', 'PreparationController@delete');
+
+	Route::get('/loading', 'LoadingController@index');
+	Route::get('/loading/data', 'LoadingController@data');
+	Route::get('/loading/detail', 'LoadingController@detail');
+	Route::post('/loading', 'LoadingController@create');
+	Route::post('/loading/export', 'LoadingController@export');
+	Route::post('/loading/{id}', 'LoadingController@update');
+	Route::post('/loading/delete/{id}', 'LoadingController@delete');
+
 	Route::get('/stock', 'StockController@index');
 	Route::get('/stock/data', 'StockController@data');
 	Route::post('/stock', 'StockController@create');
 	Route::post('/stock/export', 'StockController@export');
 	Route::post('/stock/{id}', 'StockController@update');
 	Route::post('/stock/delete/{id}', 'StockController@delete');
+
+	Route::get('/itemstatic', 'ItemStaticController@index');
+	Route::get('/itemstatic/data', 'ItemStaticController@data');
+	Route::post('/itemstatic', 'ItemStaticController@create');
+	Route::post('/itemstatic/export', 'ItemStaticController@export');
+	Route::post('/itemstatic/{id}', 'ItemStaticController@update');
+	Route::post('/itemstatic/delete/{id}', 'ItemStaticController@delete');
+
+	Route::get('/bomlist', 'BomlistController@index');
+	Route::get('/bomlist/data', 'BomlistController@data');
+	Route::get('/bomlist/detail', 'BomlistController@detail');
+	Route::post('/bomlist', 'BomlistController@create');
+	Route::post('/bomlist/export', 'BomlistController@export');
+	Route::post('/bomlist/{id}', 'BomlistController@update');
+	Route::post('/bomlist/delete/{id}', 'BomlistController@delete');
+
+	Route::get('/dailyplan', 'DailyPlanController@index');
+	Route::get('/dailyplan/data', 'DailyPlanController@data');
+	Route::get('/dailyplan/detail', 'DailyPlanController@detail');
+	Route::post('/dailyplan', 'DailyPlanController@create');
+	Route::post('/dailyplan/export', 'DailyPlanController@export');
+	Route::post('/dailyplan/{id}', 'DailyPlanController@update');
+    Route::post('/dailyplan/delete/{id}', 'DailyPlanController@delete');
+
+
+    Route::get('/mrponhand', 'MrpOnhandController@index');
+	Route::get('/mrponhand/data', 'MrpOnhandController@data');
+	Route::get('/mrponhand/detail', 'MrpOnhandController@detail');
+	Route::post('/mrponhand', 'MrpOnhandController@create');
+	Route::post('/mrponhand/export', 'MrpOnhandController@export');
+	Route::post('/mrponhand/{id}', 'MrpOnhandController@update');
+    Route::post('/mrponhand/delete/{id}', 'MrpOnhandController@delete');
+
+
 });

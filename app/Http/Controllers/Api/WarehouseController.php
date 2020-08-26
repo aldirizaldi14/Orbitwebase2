@@ -20,7 +20,6 @@ class WarehouseController extends BaseController
     public function __construct()
     {
     }
-
     public function data(Request $request)
     {
         $last_update = $request->get('last_update');

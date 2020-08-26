@@ -16,14 +16,9 @@ class Product_ViewModel extends Model
         'product_code',
         'product_code_alt',
         'product_description',
-        'product_created_at',
-        'product_created_by',
-        'product_updated_at',
-        'product_updated_by',
-        'product_deleted_at',
         'product_location_alt',
         'QTY',
-
+        'product_max_alt',
     ];
     protected $hidden = [];
     const CREATED_AT = 'product_created_at';

@@ -1,0 +1,51 @@
+#tableSignature {
+    width: 45%;
+    height: 17%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    background-color: transparent;
+    display: none;
+}
+#export-table {
+  display: none;
+}
+
+
+/*td:first-child {
+  /*background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+  cursor: pointer;
+}*/
+
+/*
+tr.shown td:first-child {
+  /*background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
+}*/
+
+td.details-control {
+    background: url('../resources/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('../resources/details_close.png') no-repeat center center;
+}
+
+/*.modal .modal-content .modal-body {
+    padding: -1px;
+}*/
+#inputleft{
+        padding: 5% 5% 0% 5%;
+            /*padding: 5% 10% 0% 10%;*/
+    }
+#outerleft{
+    /*padding: 0% 0% 0% 0%*/
+    padding: 7% 0% 5% 10%;
+}
+
+table.center {
+    margin-left:auto; 
+    margin-right:auto;
+  }
+
+.uniqueClassName {
+    text-align: center;
+}

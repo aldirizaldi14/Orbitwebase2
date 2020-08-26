@@ -36,9 +36,4 @@ class ProductModel extends Model
             )");
         }
     }
-
-    public function get_all_product()
-    {
-
-    }
 }

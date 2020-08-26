@@ -1,0 +1,100 @@
+.m-grid__item a {
+    color: #737c94;
+    text-decoration: none;
+    font-family: "Times New Roman", Times, serif;
+    padding: 8px;
+    padding-bottom: 2px;
+}
+.m-aside-menu .m-menu__nav {
+    list-style: none;
+    padding: 40px 4px 0px 16px;
+    font-size: 12.5px;
+}
+#mrphome {
+    padding-top: 4px;
+    padding-right: 1px;
+    padding-bottom: 0.5px;
+    padding-left: 8px;
+} 
+.navbar {
+    margin-bottom: 1.5rem!important;
+    margin-top: -1.5rem!important;
+}
+.navbar-collapse {
+    margin-left: 1.5rem!important;
+}
+.m-aside-menu .m-menu__nav>.m-menu__item>.m-menu__heading, .m-aside-menu .m-menu__nav>.m-menu__item>.m-menu__link {
+    cursor: pointer;
+    height: 44px;
+    /*padding: 0px 0px 25px 20px;*/
+    padding: 0px 0px 0px 20px;
+}
+.fa-plus-circle:before {
+    padding-top: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+.dropdown-container {
+  display: none;
+  background-color: #262626;
+  padding-left: 8px;
+}
+
+ol ol, ol ul, ul ol, ul ul {
+    margin-bottom: 0px;
+    margin-top: -25px;
+    margin-left: -2px;
+    margin-right: 0px;
+}
+.fa-fw {
+    width: 2.285714em;
+    text-align: center;
+}
+.m-aside-menu.m-aside-menu--skin-dark .m-menu__nav>.m-menu__item>.m-menu__heading .m-menu__link-text, .m-aside-menu.m-aside-menu--skin-dark .m-menu__nav>.m-menu__item>.m-menu__link .m-menu__link-text {
+    color: #868aa8;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+#dropbar {
+  padding: 11px 59px 0px 0px;
+  text-align: left;
+}
+
+#mrpstyle{
+    padding: 0px 0px 0px 0px;
+}
+
+#iconplus {
+   padding: 0px 0px 0px 127px;
+
+}
+#iconplusi {
+   padding: 0px 0px 0px 96px;
+
+}
+#iconplusii {
+   padding: 0px 0px 0px 108px;
+
+}
+
+
+/*dropdown rapih*/
+#delivered{
+    margin-bottom: 0px;
+    margin-top: 15px;
+    margin-left: 0px;
+    margin-right: -16px;
+}
+#producti{
+    margin-bottom: 0px;
+    margin-top: 5px;
+    margin-left: 0px;
+    margin-right: -16px;
+}
+#mrp{
+    margin-bottom: 0px;
+    margin-top: 5px;
+    margin-left: 0px;
+    margin-right: -16px;
+}

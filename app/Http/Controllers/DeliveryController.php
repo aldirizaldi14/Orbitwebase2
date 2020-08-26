@@ -32,24 +32,25 @@ class DeliveryController extends BaseController
 
     public function data(Request $request)
     {
-        $draw = $request->get('draw');
+        /*$draw = $request->get('draw');
         $start = (int) $request->get('start');
         $length = (int) $request->get('length');
         $filter = $request->get('filter');
         $sort = $request->get('sort');
         $dir = $request->get('dir');
-        if(! $sort){ $sort = 'delivery_code'; $dir = 'asc'; }
+        if(! $sort){ $sort = 'surat_jalan'; $dir = 'asc'; }
 
         $filter = DB::raw("(
-            LOWER(delivery_code) LIKE '%".strtolower($filter)."%'
+            LOWER(surat_jalan) LIKE '%".strtolower($filter)."%'
         )");
 
-        $data = DeliveryModel::orderBy($sort, $dir)
-            ->whereRaw($filter);
+        /*$data = DeliveryModel::orderBy($sort, $dir)
+            ->whereRaw($filter);*/
+        /*$data =  DB::table('sj_number')->select('surat_jalan', 'code_truck',   'party_name', 'address', 'schedule_shipdate', 'ship_quantity_check')->groupBy('surat_jalan', 'code_truck',  'party_name', 'address', 'schedule_shipdate', 'ship_quantity_check')->get();
         if ($length) {  
             $data->skip($start)->take($length); 
         }
-        $data = $data->get();
+        //$data = $data->get();
         
         $count = DeliveryModel::whereRaw($filter)
             ->count();
@@ -61,12 +62,51 @@ class DeliveryController extends BaseController
             'listData' => $data,
         ];
 
+        return $result;*/
+
+        $draw = $request->get('draw');
+        $start = (int) $request->get('start');
+        $length = (int) $request->get('length');
+        $filter = $request->get('filter');
+        $sort = $request->get('sort');
+        $dir = $request->get('dir');
+        if(! $sort){ $sort = 'surat_jalan'; $dir = 'asc'; }
+
+        $filter = DB::raw("(
+            LOWER(surat_jalan) LIKE '%".strtolower($filter)."%'
+            OR LOWER(schedule_shipdate) LIKE '%".strtolower($filter)."%'
+        )");
+
+        $data = DeliveryModel::orderBy($sort, $dir)->select('surat_jalan', 'code_truck',   'party_name', 'address', 'schedule_shipdate', 'ship_quantity_check')->groupBy('surat_jalan', 'code_truck',  'party_name', 'address', 'schedule_shipdate', 'ship_quantity_check')->whereRaw($filter);
+        
+
+        if ($length) {  
+            $data->skip($start)->take($length); 
+        }
+        $data = $data->get();
+
+
+        /*$count = DeliveryModel::select('surat_jalan', 'code_truck', 'party_name', 'address', 'schedule_shipdate', 'ship_quantity_check' , DB::raw('count(*) as total'))->groupBy('surat_jalan', 'code_truck',  'party_name', 'address', 'schedule_shipdate', 'ship_quantity_check')->get();*/
+
+        $count = $data->count();
+
+        $result = [
+            'draw' => $draw,
+            'recordsTotal' => $count,
+            'recordsFiltered' => $count,
+            'listData' => $data,
+        ];
+
         return $result;
+
+
+
+
     }
 
     public function detail(Request $request)
     {
-        $draw = $request->get('draw');
+        /*$draw = $request->get('draw');
         $delivery_id = (int) $request->get('delivery_id');
 
         $data = DeliverydetModel::where('deliverydet_delivery_id', $delivery_id)
@@ -82,8 +122,37 @@ class DeliveryController extends BaseController
             'listData' => $data,
         ];
 
+        return $result;*/
+        $draw = $request->get('draw');
+        $start = (int) $request->get('start');
+        $length = (int) $request->get('length');
+        $filter = $request->get('filter');
+        $sort = $request->get('sort');
+        $dir = $request->get('dir');
+        if(! $sort){ $sort = 'surat_jalan'; $dir = 'asc'; }
+
+        $filter = DB::raw("(
+            LOWER(surat_jalan) LIKE '%".strtolower($filter)."%'
+        )");
+
+        $pitem =$request->get('surat_jalan');
+        $bomcur = DB::table('sj_number')->select('surat_jalan', 'order_item' , 'party_name', 'address', 'schedule_shipdate', 'ship_quantity')->where('surat_jalan', '=',$pitem)->first();
+        $data =  DB::table('sj_number')->select('surat_jalan', 'order_item' , 'party_name', 'address', 'schedule_shipdate', 'ship_quantity')->where('surat_jalan', '=',$pitem)->get();
+
+        if ($length) {
+            $data->skip($start)->take($length);
+        }
+        $count =count($data);
+        $result = [
+            'draw' => $draw,
+            'recordsTotal' => $count,
+            'recordsFiltered' => $count,
+            'listData' => $data,
+        ];
         return $result;
     }
+
+
 
     public function create(Request $request)
     {

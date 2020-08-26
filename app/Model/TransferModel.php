@@ -13,10 +13,10 @@ class TransferModel extends Model
     protected $table = 'transfer';
     protected $primaryKey = 'transfer_id';
     protected $fillable = [
-        'transfer_code', 
-        'transfer_time', 
-        'transfer_sent_at', 
-        'transfer_user_id', 
+        'transfer_code',
+        'transfer_time',
+        'transfer_sent_at',
+        'transfer_user_id',
         'transfer_created_at',
         'transfer_created_by',
         'transfer_updated_at',

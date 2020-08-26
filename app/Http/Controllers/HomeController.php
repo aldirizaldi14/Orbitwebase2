@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Model\ProductionModel;
 use App\Model\DeliveryModel;
+use App\Model\DeliverydetModel;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use DB;
@@ -39,13 +40,23 @@ class HomeController extends Controller
             ->groupBy(DB::raw("CONVERT(varchar, production_time, 101)"))
             ->get();
 
-        $delivery_data = DeliveryModel::selectRaw("
+        /*$delivery_data = DeliveryModel::selectRaw("
                 SUM(deliverydet_qty) as delivery_qty,
                 CONVERT(varchar, delivery_time, 101) as delivery_time
             ")
             ->join('deliverydet', 'deliverydet.deliverydet_delivery_id', '=', 'delivery.delivery_id')
             ->where('delivery_time', '>=', Carbon::now()->subDays(30))
             ->groupBy(DB::raw("CONVERT(varchar, delivery_time, 101)"))
+            ->get();*/
+
+
+        $delivery_data = DeliverydetModel::selectRaw("
+                SUM(deliverydet_qty) as delivery_qty,
+                CONVERT(varchar, deliverydet_updated_at, 101) as deliverydet_updated_at
+            ")
+            //->join('deliverydet', 'deliverydet.deliverydet_delivery_id', '=', 'delivery.delivery_id')
+            ->where('deliverydet_updated_at', '>=', Carbon::now()->subDays(30))
+            ->groupBy(DB::raw("CONVERT(varchar, deliverydet_updated_at, 101)"))
             ->get();
 
         $final = [];
