@@ -33,7 +33,7 @@ use DB;
 
 class DeliveryModel extends Model
 {
-    use Notifiable;//, SoftDeletes;
+    use Notifiable, SoftDeletes;
 
     protected $table = 'sj_number';
     protected $primaryKey = 'delivery_id';
@@ -62,5 +62,5 @@ class DeliveryModel extends Model
     protected $hidden = [];
     const CREATED_AT = 'delivery_created_at';
     const UPDATED_AT = 'delivery_updated_at';
-    //const DELETED_AT = 'delivery_deleted_at';
+    const DELETED_AT = 'delivery_deleted_at';
 }

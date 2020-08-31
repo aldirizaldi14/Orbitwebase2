@@ -28,7 +28,7 @@ class DeliveryController extends BaseController
     public function data(Request $request)
     {
         $last_update = $request->get('last_update');
-        $data = DeliveryModel::select("delivery.*")
+        $data = DeliveryModel::select("sj_number.*")
             ->addSelect(DB::raw('1 as delivery_sync'))
             ->withTrashed();
         if($last_update){
