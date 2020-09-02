@@ -37,10 +37,6 @@ class DeliveryController extends BaseController
                     ->orWhere('delivery_updated_at', '>=', $last_update)
                     ->orWhere('delivery_deleted_at', '>=', $last_update);
             });
-        }else{
-            $data->where(function($q) use ($last_update){
-                $q->where('delivery_created_at', '>=', Carbon::now()->subDays(2));
-            });
         }
         $data = $data->get();
         return $data;
