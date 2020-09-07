@@ -115,4 +115,29 @@ class DeliveryController extends BaseController
             return ['status' => 'error', 'success' => false, 'message' => 'Failure'];
         }
     }
+
+    public function syncSj(Request $request)
+    {
+        $user = Auth::guard('api')->user();
+        $data = json_decode($request->data);
+
+        DB::beginTransaction();
+        try {
+            $delivery = DeliveryModel::where('delivery_id', $data->delivery_id)
+                ->first();
+            if(! $delivery){
+                DB::rollback();
+                return ['status' => 'error', 'success' => false, 'message' => 'Failure'];
+            }
+            
+            $delivery->ship_quantity_check = $data->ship_quantity_check;
+            $save = $delivery->save();
+            DB::commit();
+            return ['status' => 'success', 'success' => true, 'message' => 'Saved'];
+        } catch (\Throwable $e) {
+            DB::rollback();
+            throw $e;
+            return ['status' => 'error', 'success' => false, 'message' => 'Failure'];
+        }
+    }
 }

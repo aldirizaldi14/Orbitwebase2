@@ -37,6 +37,8 @@ Route::group(['middleware' => ['auth:api']], function () {
 	Route::post('/delivery/sync', 'Api\DeliveryController@sync');
 	Route::post('/qty/data', 'Api\QtyController@data');
 
+	Route::post('/surat_jalan/sync', 'Api\DeliveryController@syncSj');
+
 	Route::post('/last_update', function () { return date('Y-m-d H:i:s'); });
 });
 Route::fallback(function(){

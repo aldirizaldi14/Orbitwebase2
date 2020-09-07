@@ -232,6 +232,9 @@ $(document).ready(function() {
     });
 
     $("#refresh").click(function(){
+        var btn = $("#refresh");
+        btn.html('Processing... <i  class="m-nav__link-icon fa fa-refresh fa-spin"></i>').attr('disabled', true);
+
         $.ajax({
             url: '{{ url('mrp') }}/mrp_onhand',
             method: "POST",
@@ -245,12 +248,14 @@ $(document).ready(function() {
             if (resp.success) {
                 window.open(resp.file);
             }else{
-               
                 swal.fire("success!", resp.message, "success");
             }
         })
         .fail(function() {
             swal.fire("Warning", 'Unable to process request at this moment', "warning");
+        })
+        .always(function() {
+            btn.html('<i  class="m-nav__link-icon fa fa-refresh"></i>').attr('disabled', false);
         });
     });
 });
