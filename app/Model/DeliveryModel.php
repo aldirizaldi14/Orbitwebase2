@@ -52,6 +52,7 @@ class DeliveryModel extends Model
     'driver',
     'code_truck',
     'line_number',
+    'status_check',
     'delivery_created_at',
     'delivery_created_by',
     'delivery_updated_at',

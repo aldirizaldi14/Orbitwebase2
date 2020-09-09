@@ -131,6 +131,7 @@ class DeliveryController extends BaseController
             }
             
             $delivery->ship_quantity_check = $data->ship_quantity_check;
+            $delivery->status_check = $data->status_check;
             $save = $delivery->save();
             DB::commit();
             return ['status' => 'success', 'success' => true, 'message' => 'Saved'];

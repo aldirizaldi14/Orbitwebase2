@@ -218,7 +218,7 @@ $(document).ready(function() {
         { data: "order_item" },
         { data: "ship_quantity" },
         { data: "ship_quantity_check" },
-        { data: "ship_quantity_check" },
+        { data: "status_check" },
         { data: "surat_jalan", width: 20, sortable: false}
         
 
